@@ -36,7 +36,9 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
+    <AndroidSupportedAbis>arm64-v8a;armeabi-v7a</AndroidSupportedAbis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -50,6 +52,7 @@
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <JavaMaximumHeapSize>2G</JavaMaximumHeapSize>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -63,6 +66,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DroidApplication.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -113,9 +117,19 @@
     <PackageReference Include="Xamarin.AndroidX.ExifInterface">
       <Version>1.3.3.6</Version>
     </PackageReference>
-    <PackageReference Include="ImageValidation">
-      <Version>1.0.1</Version>
-    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImageValidation.Android\ImageValidation.Android.csproj">
+      <Project>{4B496C72-12CA-4CF5-BD58-A1720ADBCE15}</Project>
+      <Name>ImageValidation.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageValidation.Core\ImageValidation.Core.csproj">
+      <Project>{BA25B8A2-E674-460C-8F25-BEF465192AA0}</Project>
+      <Name>ImageValidation.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidEnvironment Include="Environment.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -17,6 +17,7 @@ using System.Linq;
 using Android.Graphics;
 using AndroidX.ExifInterface.Media;
 using Android.Content.PM;
+using Android.Graphics.Drawables;
 
 namespace ImageValidation.Sample
 {
@@ -28,6 +29,7 @@ namespace ImageValidation.Sample
         private ImageView _imageView;
         private TextView _textView1;
         private TextView _textView2;
+        private TextView _textView3;
 
         private ReceiptDetector _detector;
 
@@ -52,11 +54,13 @@ namespace ImageValidation.Sample
 
             _textView1 = FindViewById<TextView>(Resource.Id.textView1);
             _textView2 = FindViewById<TextView>(Resource.Id.textView2);
+            _textView3 = FindViewById<TextView>(Resource.Id.textView3);
 
             _detector = Factory.CreateReceiptDetector();
 
             _textView1.Visibility = ViewStates.Gone;
             _textView2.Visibility = ViewStates.Gone;
+            _textView3.Visibility = ViewStates.Gone;
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -156,9 +160,14 @@ namespace ImageValidation.Sample
         {
             try
             {
+                BitmapDrawable drawable = _imageView.Drawable as BitmapDrawable;
+                Bitmap oldBitmap = drawable?.Bitmap;
+                oldBitmap?.Recycle();
+
                 _imageView.SetImageBitmap(null);
                 _textView1.Visibility = ViewStates.Gone;
                 _textView2.Visibility = ViewStates.Gone;
+                _textView3.Visibility = ViewStates.Gone;
 
                 _progressDialog = CreateDialogProgressBar();
                 _progressDialog.Show();
@@ -178,15 +187,26 @@ namespace ImageValidation.Sample
                 _progressDialog.Hide();
                 _progressDialog = null;
 
-                if (res > 0.4f)
+                if (res.Item1 > 0.4f)
                 {
-                    _textView1.Visibility = ViewStates.Visible;
-                    _textView2.Visibility = ViewStates.Gone;
+                    if (res.Item2 > 0.6f)
+                    {
+                        _textView1.Visibility = ViewStates.Gone;
+                        _textView2.Visibility = ViewStates.Gone;
+                        _textView3.Visibility = ViewStates.Visible;
+                    }
+                    else
+                    {
+                        _textView1.Visibility = ViewStates.Visible;
+                        _textView2.Visibility = ViewStates.Gone;
+                        _textView3.Visibility = ViewStates.Gone;
+                    }
                 }
                 else
                 {
                     _textView1.Visibility = ViewStates.Gone;
                     _textView2.Visibility = ViewStates.Visible;
+                    _textView3.Visibility = ViewStates.Gone;
                 }
 
                 //AlertDialog.Builder alert = new AlertDialog.Builder(this);

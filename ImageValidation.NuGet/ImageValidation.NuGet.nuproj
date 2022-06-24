@@ -7,7 +7,7 @@
     <ProjectGuid>{9D5E1BAB-009E-4127-9E56-84FB5F5ADF2C}</ProjectGuid>
     <Description>ImageValidation</Description>
     <PackageId>ImageValidation</PackageId>
-    <PackageVersion>1.0.1</PackageVersion>
+    <PackageVersion>1.0.2</PackageVersion>
     <Authors>amagaev</Authors>
     <DevelopmentDependency>false</DevelopmentDependency>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
