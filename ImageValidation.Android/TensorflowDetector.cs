@@ -84,15 +84,17 @@ namespace ImageValidation
             var countOfInterestLocations = detectionScores[0].Count(v => v > 0.2);
             if (countOfInterestLocations > 0)
             {
+                Func<float, float> minMax = (float v) => Math.Min(1.0f, Math.Max(0, v));
+
                 for (var i = 0; i < countOfInterestLocations; i++)
                 {
                     var boxPoints = detectionBoxes[0][i];
                     var boxScore = detectionScores[0][i];
                     var rect = new System.Drawing.Rectangle(
-                        (int)(boxPoints[1] * originalWidth),
-                        (int)(boxPoints[0] * originalHeight),
-                        (int)(boxPoints[3] * originalWidth) - (int)(boxPoints[1] * originalWidth),
-                        (int)(boxPoints[2] * originalHeight) - (int)(boxPoints[0] * originalHeight));
+                        (int)(minMax(boxPoints[1]) * originalWidth),
+                        (int)(minMax(boxPoints[0]) * originalHeight),
+                        (int)(minMax(boxPoints[3]) * originalWidth) - (int)(minMax(boxPoints[1]) * originalWidth),
+                        (int)(minMax(boxPoints[2]) * originalHeight) - (int)(minMax(boxPoints[0]) * originalHeight));
                     locations.Add(new DetectedLocation(rect, boxScore));
                 }
             }

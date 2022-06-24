@@ -7,7 +7,7 @@
     <ProjectGuid>{9D5E1BAB-009E-4127-9E56-84FB5F5ADF2C}</ProjectGuid>
     <Description>ImageValidation</Description>
     <PackageId>ImageValidation</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
     <Authors>amagaev</Authors>
     <DevelopmentDependency>false</DevelopmentDependency>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -38,14 +38,14 @@
       <Project>{4B496C72-12CA-4CF5-BD58-A1720ADBCE15}</Project>
       <Name>ImageValidation.Android</Name>
       <SkipGetTargetFrameworkProperties></SkipGetTargetFrameworkProperties>
-      <ReferenceOutputAssembly></ReferenceOutputAssembly>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
       <AdditionalProperties></AdditionalProperties>
     </ProjectReference>
     <ProjectReference Include="..\ImageValidation.iOS\ImageValidation.iOS.csproj">
       <Project>{48F20E00-AA80-4E88-B58C-563A2A636BA5}</Project>
       <Name>ImageValidation.iOS</Name>
       <SkipGetTargetFrameworkProperties></SkipGetTargetFrameworkProperties>
-      <ReferenceOutputAssembly></ReferenceOutputAssembly>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
       <AdditionalProperties></AdditionalProperties>
     </ProjectReference>
   </ItemGroup>
