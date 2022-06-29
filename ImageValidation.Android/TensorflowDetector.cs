@@ -9,12 +9,12 @@ using Java.IO;
 using Java.Nio;
 using Java.Nio.Channels;
 using ImageValidation.Models;
+using Console = System.Console;
 
 namespace ImageValidation
 {
     public class TensorflowDetector
     {
-        private const int FloatSize = 4;
         private const int PixelSize = 3;
 
         private readonly string _tfliteModelAssetName;
@@ -62,7 +62,9 @@ namespace ImageValidation
             var originalWidth = bitmap.Width;
             var originalHeight = bitmap.Height;
 
-            var byteBuffer = GetPhotoAsByteBuffer(bitmap, width, height);
+            var byteBuffer = _quantized
+                ? ByteBufferExtension.CreateQuantizedByteBuffer(bitmap, width, height, PixelSize)
+                : ByteBufferExtension.CreateByteBuffer(bitmap, width, height, PixelSize);
 
             // Output boxes.
             Dictionary<Java.Lang.Integer, Java.Lang.Object> outputMap = new Dictionary<Java.Lang.Integer, Java.Lang.Object>()
@@ -178,49 +180,6 @@ namespace ImageValidation
             var mappedByteBuffer = inputStream.Channel.Map(FileChannel.MapMode.ReadOnly, assetDescriptor.StartOffset, assetDescriptor.DeclaredLength);
 
             return mappedByteBuffer;
-        }
-
-        private ByteBuffer GetPhotoAsByteBuffer(Bitmap bitmap, int width, int height)
-        {
-            var modelInputSize = _quantized ? (height * width * PixelSize) : (FloatSize * height * width * PixelSize);
-
-            var resizedBitmap = Bitmap.CreateScaledBitmap(bitmap, width, height, true);
-
-            var byteBuffer = ByteBuffer.AllocateDirect(modelInputSize);
-            byteBuffer.Order(ByteOrder.NativeOrder());
-
-            var pixels = new int[width * height];
-            resizedBitmap.GetPixels(pixels, 0, resizedBitmap.Width, 0, 0, resizedBitmap.Width, resizedBitmap.Height);
-
-            var pixel = 0;
-
-            for (var i = 0; i < width; i++)
-            {
-                for (var j = 0; j < height; j++)
-                {
-                    var pixelVal = pixels[pixel++];
-
-                    if (_quantized)
-                    {
-                        byteBuffer.Put((sbyte)(pixelVal >> 16 & 0xFF));
-                        byteBuffer.Put((sbyte)(pixelVal >> 8 & 0xFF));
-                        byteBuffer.Put((sbyte)(pixelVal & 0xFF));
-                    }
-                    else
-                    {
-                        byteBuffer.PutFloat(pixelVal >> 16 & 0xFF);
-                        byteBuffer.PutFloat(pixelVal >> 8 & 0xFF);
-                        byteBuffer.PutFloat(pixelVal & 0xFF);
-                    }
-                }
-            }
-
-            if (resizedBitmap != bitmap)
-            {
-                resizedBitmap.Recycle();
-            }
-
-            return byteBuffer;
         }
     }
 }
